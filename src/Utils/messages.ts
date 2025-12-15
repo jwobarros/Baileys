@@ -551,7 +551,11 @@ export const generateWAMessageContent = async (
 				buttonsMessage.contentText = message.caption
 			}
 
-			const type = Object.keys(m)[0].replace('Message', '').toUpperCase()
+			const messageKey = Object.keys(m)[0]
+			if (!messageKey) {
+				throw new Boom('Invalid message object: empty message', { statusCode: 400 })
+			}
+			const type = messageKey.replace('Message', '').toUpperCase() as keyof typeof ButtonType
 			buttonsMessage.headerType = ButtonType[type]
 
 			Object.assign(buttonsMessage, m)
