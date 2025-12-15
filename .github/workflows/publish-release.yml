@@ -27,7 +27,7 @@ jobs:
         with:
           node-version: 20.x
           registry-url: https://npm.pkg.github.com
-          scope: '@seu-usuario'
+          scope: '@jwobarros'
 
       - name: Enable Corepack and Set Yarn Version
         run: |
