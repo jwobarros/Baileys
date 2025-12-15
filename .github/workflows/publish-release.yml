@@ -29,6 +29,14 @@ jobs:
           registry-url: https://npm.pkg.github.com
           scope: '@jwobarros'
 
+      # 🔑 AUTH REAL PARA YARN + NPM
+      - name: Configure auth for GitHub Packages
+        run: |
+          echo "@jwobarros:registry=https://npm.pkg.github.com" >> ~/.npmrc
+          echo "//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}" >> ~/.npmrc
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Enable Corepack and Set Yarn Version
         run: |
           corepack enable
@@ -36,7 +44,6 @@ jobs:
 
       - name: Restore Yarn Cache
         uses: actions/cache@v3
-        id: yarn-cache
         with:
           path: .yarn/cache
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
@@ -45,16 +52,15 @@ jobs:
 
       - name: Install Dependencies
         run: yarn install --immutable
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build
         run: yarn build
 
+      # ✅ PUBLISH CORRETO PARA GITHUB PACKAGES
       - name: Publish Package (GitHub Packages)
-        run: yarn npm publish --access restricted
+        run: yarn npm publish
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          YARN_NPM_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Generate Changelog
         id: generate_changelog
