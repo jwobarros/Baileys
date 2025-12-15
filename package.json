@@ -1,7 +1,7 @@
 {
   "name": "@jwobarros/baileys",
   "type": "module",
-  "version": "6.7.21-custom.1",
+  "version": "6.7.21-custom.2",
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
   },
